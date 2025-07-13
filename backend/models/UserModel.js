@@ -51,10 +51,7 @@ const userSchema = new mongoose.Schema(
       ref: "Department",
       required: [true, "Department is required."],
     },
-    profilePicture: {
-      url: String,
-      public_id: String,
-    },
+    profilePicture: { url: String, public_id: String },
     skills: [{ type: String, trim: true, maxlength: 30 }],
     employeeId: { type: String, trim: true, sparse: true },
     hireDate: { type: Date, default: Date.now },
