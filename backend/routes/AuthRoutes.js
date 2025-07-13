@@ -6,6 +6,7 @@ import {
   loginUser,
   logoutUser,
   getRefreshToken,
+  getCurrentUser,
 } from "../controllers/AuthController.js";
 
 import { verifyJWT } from "../middlewares/authMiddleware.js";
@@ -32,5 +33,10 @@ router.delete("/logout", verifyJWT, logoutUser);
 // @desc    Refresh user token
 // @access  Private
 router.get("/refresh-token", verifyJWT, getRefreshToken);
+
+// @route   GET /api/auth/me
+// @desc    Get current user profile
+// @access  Private
+router.get("/me", verifyJWT, getCurrentUser);
 
 export default router;
