@@ -15,6 +15,9 @@ import corsOptions from "./config/corsOptions.js";
 import globalErrorHandler from "./errorHandler/ErrorController.js";
 import CustomError from "./errorHandler/CustomError.js";
 
+// Routes
+import ApiRoutes from "./routes/index.js";
+
 // Create an Express application
 const app = express();
 
@@ -43,12 +46,7 @@ app.get("/health", (req, res) => {
 });
 
 // Main API routes
-app.use("/api", (req, res, next) => {
-  res.status(200).json({
-    message: "Welcome to the API",
-    timestamp: new Date().toISOString(),
-  });
-});
+app.use("/api", ApiRoutes);
 
 // Catch-all route for undefined endpoints
 app.all("*", (req, res, next) => {
