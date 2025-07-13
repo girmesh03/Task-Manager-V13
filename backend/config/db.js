@@ -5,12 +5,19 @@ const MAX_RETRIES = 5;
 const INITIAL_RETRY_DELAY = 1000;
 let retryCount = 0;
 let isConnecting = false;
+let retryTimeout = null;
 
 const connectWithRetry = async () => {
   if (mongoose.connection.readyState >= 1) return;
   if (isConnecting) return;
 
   isConnecting = true;
+
+  // Clear any existing retry timeout
+  if (retryTimeout) {
+    clearTimeout(retryTimeout);
+    retryTimeout = null;
+  }
 
   try {
     if (!process.env.MONGODB_URI) {
@@ -35,7 +42,7 @@ const connectWithRetry = async () => {
       console.warn(
         `Retrying connection in ${delay}ms... (${retryCount}/${MAX_RETRIES})`
       );
-      setTimeout(connectWithRetry, delay);
+      retryTimeout = setTimeout(connectWithRetry, delay);
       return;
     }
 
@@ -60,8 +67,8 @@ mongoose.connection.on("connected", () => {
 
 mongoose.connection.on("disconnected", () => {
   console.log("🔌 MongoDB connection lost. Attempting to reconnect...");
-  if (!isConnecting) {
-    setTimeout(connectWithRetry, 1000);
+  if (!isConnecting && retryCount < MAX_RETRIES) {
+    retryTimeout = setTimeout(connectWithRetry, 1000);
   }
 });
 

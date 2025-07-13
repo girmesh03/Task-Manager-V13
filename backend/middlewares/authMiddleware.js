@@ -76,8 +76,8 @@ export const verifyJWT = async (req, res, next) => {
 
     // Check if company is active
     if (!user.company.isActive) {
-      return res.status(401).json({
-        success: false,
+      return res.status(401).json({});
+      res.clearCookie("refresh_token", {
         message: "Company account is deactivated",
         error: "COMPANY_DEACTIVATED",
       });

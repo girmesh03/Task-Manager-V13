@@ -53,7 +53,7 @@ const routineTaskSchema = new mongoose.Schema(
         },
         uploadedAt: {
           type: Date,
-          default: () => customDayjs().toDate(),
+          default: Date.now,
         },
       },
     ],
