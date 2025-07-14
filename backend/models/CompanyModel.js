@@ -134,6 +134,8 @@ companySchema.pre("save", function (next) {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   if (this.isModified("name")) this.name = capitalize(this.name);
   if (this.isModified("address")) this.address = capitalize(this.address);
+  if (this.isModified("phone") && this.phone.startsWith("09"))
+    this.phone = this.phone.replace("09", "+2519");
   next();
 });
 
