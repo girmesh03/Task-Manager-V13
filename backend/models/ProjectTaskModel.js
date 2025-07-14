@@ -30,4 +30,14 @@ const projectTaskSchema = new mongoose.Schema(
   }
 );
 
+// Pre-save hook to format client phone number
+projectTaskSchema.pre("save", function (next) {
+  if (
+    this.isModified("clientInfo.phone") &&
+    this.clientInfo.phone.startsWith("09")
+  )
+    this.clientInfo.phone = this.clientInfo.phone.replace("09", "+2519");
+  next();
+});
+
 export default Task.discriminator("ProjectTask", projectTaskSchema);
